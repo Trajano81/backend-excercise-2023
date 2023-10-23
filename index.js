@@ -12,16 +12,32 @@ app.get('/oi', function (req, res) {
 })
 
 // CRUD list of creatures
-const items = ['java','android','kotlin']
+const items = [
+  {
+    id:1,
+    name:'Java',
+    imageUrl:'https://salvatore.academy/devmon/1_java.png'
+  },
+  {
+    id:2,
+    name:'Kotlin',
+    imageUrl:'https://salvatore.academy/devmon/2_kotlin.png'
+  }
+
+]
 
 // CREATE - [POST] /items
 app.post('/items', function(req, res){
-  const item=req.body.nome
+  const item=req.body
+
+  item.id=items.length+1
 
   //Insert into list
   items.push(item)
 
-  res.send("Item inserted succesfully")
+  // res.send("Item inserted succesfully")
+  // Whehn working with objects is better to return the object
+  res.send(item)
 })
 
 // READ ALL - [GET] /items
@@ -29,14 +45,16 @@ app.get('/items', function(req, res){
   res.send(items.filter(Boolean))
 })
 
-// READ - [GET] /items/:id
+// READ BY ID - [GET] /items/:id
 app.get("/items/:id", function(req, res){
   //Access the path parameter ID
   //Substracting one 
-  const id= req.params.id - 1
+  const id= +req.params.id //+ is to transform the id into number
 
   // Access the item from the list
-  const item=items[id]
+  const item= items.find(function(element){
+    return element.id===id
+  })
 
   //Show item value
   res.send(item)
@@ -45,24 +63,34 @@ app.get("/items/:id", function(req, res){
 // UPDATE - [PUT] /items/:id
 app.put("/items/:id", function(req, res){
   //Access the path parameter and fix the index
-  const id = req.params.id - 1
+  const id = +req.params.id
   
   //Obtain the new item from the request body
-  const newItem = req.body.name
+  const newItem = req.body
 
   //Set new item in a previous position
-  items[id] = newItem
+  const index = items.findIndex(function(element){
+    return element.id===id
+  })
+  items[index] = {
+    ...newItem, // 3 points clone element
+    id
+  }
 
   //Send a success message
-  res.send("Items updated by id, succesfully")
+  res.send(items[index])
 })
 
 // DELETE - [DELETE] /items/:id
 app.delete("/items/:id", function(req, res){
   //Access the path parameter and fix the index
-  const id = req.params.id - 1
+  const id = +req.params.id
   // Deleting item with id
-  delete items[id]
+  const index=items.findIndex(function(element){
+    return element.id===id
+  })
+  
+  delete items[index]
   //Send a success message
   res.send("Item deleted succesfully")
 })
