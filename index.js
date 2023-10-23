@@ -30,6 +30,12 @@ const items = [
 app.post('/items', function(req, res){
   const item=req.body
 
+  if (!item || !item.name || !item.imageUrl ){
+    return res.status(400).send({
+      message: "name and imageUrl are required"
+    })
+  }
+
   item.id=items.length+1
 
   //Insert into list
@@ -37,7 +43,7 @@ app.post('/items', function(req, res){
 
   // res.send("Item inserted succesfully")
   // Whehn working with objects is better to return the object
-  res.send(item)
+  res.status(201).send(item)
 })
 
 // READ ALL - [GET] /items
