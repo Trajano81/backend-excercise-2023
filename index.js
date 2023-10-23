@@ -32,6 +32,21 @@ app.get("/items/:id", function(req, res){
   res.send(item)
 })
 
+// UPDATE - [PUT] /items/:id
+app.put("/items/:id", function(req, res){
+  //Access the path parameter and fix the index
+  const id = req.params.id - 1
+  
+  //Obtain the new item from the request body
+  const newItem = req.body.name
+
+  //Set new item in a previous position
+  items[id] = newItem
+
+  //Send a success message
+  res.send("Items updated by id, succesfully")
+})
+
 // CREATE - [POST] /items
 app.post('/items', function(req, res){
   const item=req.body.nome
