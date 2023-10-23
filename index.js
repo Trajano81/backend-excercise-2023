@@ -30,12 +30,15 @@ const items = [
 app.post('/items', function(req, res){
   const item=req.body
 
+  //Request body validated to guarantee
+  //the correct properties
   if (!item || !item.name || !item.imageUrl ){
     return res.status(400).send({
       message: "name and imageUrl are required"
     })
   }
-
+  //Create the id for the new object considering
+  //the length of the list
   item.id=items.length+1
 
   //Insert into list
@@ -78,6 +81,8 @@ app.put("/items/:id", function(req, res){
   const index = items.findIndex(function(element){
     return element.id===id
   })
+  // Clone all the properties and
+  // keep the id from the object
   items[index] = {
     ...newItem, // 3 points clone element
     id
@@ -91,11 +96,11 @@ app.put("/items/:id", function(req, res){
 app.delete("/items/:id", function(req, res){
   //Access the path parameter and fix the index
   const id = +req.params.id
-  // Deleting item with id
+  //Find the index from the items list
   const index=items.findIndex(function(element){
     return element.id===id
   })
-  
+  // Deleting item with id
   delete items[index]
   //Send a success message
   res.send("Item deleted succesfully")
