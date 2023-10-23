@@ -14,9 +14,19 @@ app.get('/oi', function (req, res) {
 // CRUD list of creatures
 const items = ['java','android','kotlin']
 
+// CREATE - [POST] /items
+app.post('/items', function(req, res){
+  const item=req.body.nome
+
+  //Insert into list
+  items.push(item)
+
+  res.send("Item inserted succesfully")
+})
+
 // READ ALL - [GET] /items
 app.get('/items', function(req, res){
-  res.send(items)
+  res.send(items.filter(Boolean))
 })
 
 // READ - [GET] /items/:id
@@ -47,15 +57,17 @@ app.put("/items/:id", function(req, res){
   res.send("Items updated by id, succesfully")
 })
 
-// CREATE - [POST] /items
-app.post('/items', function(req, res){
-  const item=req.body.nome
-
-  //Insert into list
-  items.push(item)
-
-  res.send("Item inserted succesfully")
+// DELETE - [DELETE] /items/:id
+app.delete("/items/:id", function(req, res){
+  //Access the path parameter and fix the index
+  const id = req.params.id - 1
+  // Deleting item with id
+  delete items[id]
+  //Send a success message
+  res.send("Item deleted succesfully")
 })
+
+
 
 app.listen(3000, function(){
   console.log('App running on http://localhost:3000')
