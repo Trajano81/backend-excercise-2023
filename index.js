@@ -14,12 +14,25 @@ app.get('/oi', function (req, res) {
 // CRUD list of creatures
 const items = ['java','android','kotlin']
 
-// READ ALL - GET / (Items)
+// READ ALL - [GET] /items
 app.get('/items', function(req, res){
   res.send(items)
 })
 
-// CREATE - POST / items
+// READ - [GET] /items/:id
+app.get("/items/:id", function(req, res){
+  //Access the path parameter ID
+  //Substracting one 
+  const id= req.params.id - 1
+
+  // Access the item from the list
+  const item=items[id]
+
+  //Show item value
+  res.send(item)
+})
+
+// CREATE - [POST] /items
 app.post('/items', function(req, res){
   const item=req.body.nome
 
